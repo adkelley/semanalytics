@@ -27,7 +27,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 
 # safely store api keys
-gem 'dotenv'
+gem 'dotenv-rails'
 
 # twitter api
 gem 'twitter'
