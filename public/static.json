@@ -62,27 +62,6 @@
    ]
   },
   {
-   "name": "data",
-   "children": [
-    {
-     "name": "converters",
-     "children": [
-      {"name": "Converters", "size": 721},
-      {"name": "DelimitedTextConverter", "size": 4294},
-      {"name": "GraphMLConverter", "size": 9800},
-      {"name": "IDataConverter", "size": 1314},
-      {"name": "JSONConverter", "size": 2220}
-     ]
-    },
-    {"name": "DataField", "size": 1759},
-    {"name": "DataSchema", "size": 2165},
-    {"name": "DataSet", "size": 586},
-    {"name": "DataSource", "size": 3331},
-    {"name": "DataTable", "size": 772},
-    {"name": "DataUtil", "size": 3322}
-   ]
-  },
-  {
    "name": "display",
    "children": [
     {"name": "DirtySprite", "size": 8833},
