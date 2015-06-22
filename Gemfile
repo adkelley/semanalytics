@@ -29,6 +29,9 @@ gem 'bcrypt', '~> 3.1.7'
 # safely store api keys
 gem 'dotenv'
 
+# twitter api
+gem 'twitter'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
