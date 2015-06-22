@@ -11,22 +11,22 @@ Relationships look like this.
 
 ###### User
 ---
-email - String
-password - Password
-OAuth Token - String ?
+email - String  
+password - Password  
+OAuth Token - String ?  
 
 ###### Query
 ---
-time - Timestamp
-filter_words - Boolean
-threshold - Integer
-query - String
-user_id - Integer
+time - Timestamp  
+filter_words - Boolean  
+threshold - Integer  
+query - String  
+user_id - Integer  
 
 ###### Tweet
 ---
-content - String
-time_tweeted - Timestamp
+content - String  
+time_tweeted - Timestamp  
 
 ### Decisions
 * Lets store tweets "in the raw" and rebuild the results arrays as needed. We chose this direction to preserve flexibility if we change what gets used as a 'result' in the future.
