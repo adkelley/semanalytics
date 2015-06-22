@@ -9,7 +9,7 @@
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
         <% else %>
-          <li class="active"><%= link_to "Log In", login_path %></li>
+          <li class="active"><%= link_to "Log In", sign_in_path %></li>
           <li class="active"><%= link_to "Sign Up", sign_up_path %></li>
         <% end %>
       </ul>
