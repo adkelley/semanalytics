@@ -1,0 +1,19 @@
+<header class="navbar navbar-fixed-top navbar-inverse">
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Twitter App</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <% if logged_in? %>
+        <% else %>
+          <li class="active"><%= link_to "Log In", login_path %></li>
+          <li class="active"><%= link_to "Sign Up", sign_up_path %></li>
+        <% end %>
+      </ul>
+    </div>
+
+  </div>
+</header>
