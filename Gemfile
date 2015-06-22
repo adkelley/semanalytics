@@ -5,6 +5,8 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
+# Bootstrap rails
+gem 'bootstrap-sass', '~> 3.3.4'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -31,6 +33,9 @@ gem 'dotenv-rails'
 
 # twitter api
 gem 'twitter'
+
+# ffaker for seeding the database
+gem 'ffaker'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
