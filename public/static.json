@@ -5,6 +5,7 @@
       {"name": "DataEvent", "size": 2313},
       {"name": "SelectionEvent", "size": 1880},
       {"name": "TooltipEvent", "size": 1701},
-      {"name": "VisualizationEvent", "size": 1117}
+      {"name": "VisualizationEvent", "size": 1117},
+      {"name": "proof", "size": 117}
      ]
     }
