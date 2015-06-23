@@ -4,6 +4,7 @@ class CreateQueries < ActiveRecord::Migration
       t.boolean :utility_words
       t.integer :word_count_min
       t.string :query_string
+      t.references :user
 
       t.timestamps null: false
     end
