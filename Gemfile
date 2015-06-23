@@ -28,6 +28,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+# safely store api keys
+gem 'dotenv-rails'
+
+# twitter api
+gem 'twitter'
+
 # ffaker for seeding the database
 gem 'ffaker'
 
@@ -43,6 +49,9 @@ group :development, :test do
 
   # Call 'pry-rails' anywhere in the code to stop execution and get a debugger console
   gem 'pry-rails'
+  gem 'pry-byebug'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'

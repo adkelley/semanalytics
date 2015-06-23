@@ -1,7 +1,25 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+require 'ffaker'
+
+(1..5).each do
+  user_params = {}
+  user_params[:email] = FFaker::Internet.email
+  user_params[:password] = "fakedata"
+  user_params[:password_confirmation] = user_params[:password]
+  new_user = User.create(user_params)
+
+  (1..5).each do
+    new_query = Query.new
+    new_query.query_string = FFaker::HipsterIpsum.word
+    new_query.word_count_min = 5
+    new_query.utility_words = false
+    new_query.save
+    new_user.queries << new_query
+    
+    (1..5).each do
+      new_tweet = Tweet.new
+      new_tweet.tweet_string = FFaker::HipsterIpsum.sentence
+      new_tweet.save
+      new_query.tweets << new_tweet
+    end
+  end
+end
