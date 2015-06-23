@@ -29,16 +29,34 @@ class Tapi
  #     ]
  #    }
 
-	def search(string,num)
+	def search(string,num,threshold = 5)
 		options = {
 			lang: "en",
 			result_type: "recent"
 		}
+		@query = string
 		@data = []
 		@client.search(string, options).take(num).collect do |tweet|
 			@data.push({text: tweet.text})
 		end
-		return @data
+		sanitize
+		build
+		json(threshold)
+	end
+
+	def json(threshold)
+		arr =[]
+		@data.each do |word,occurences|
+			if (occurences > threshold)
+				swh = {name: word, size: occurences}
+				arr.push swh
+			end
+		end
+
+		@data = {name: @query, children: arr }.to_json
+
+
+		"check #{self}.data for results"
 	end
 
 	def build
