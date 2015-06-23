@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'about/show'
+
   root to: "users#index"
   get "/d3", to: "welcome#index"
   get "/users/", to: "user#index", as: "users"
