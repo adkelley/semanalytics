@@ -10,9 +10,13 @@ module SessionsHelper
   end
 
   def logged_in?
+   @current_user != nil
+  end
+
+  def require_login
     if current_user == nil
-      redirect_to "/sign_in"
-    end
+      redirect_to "/sign_up"
+     end
   end
 
   def logout
