@@ -1,27 +1,10 @@
-  // {
-  //     "name": "#DataEvent", "size": 2313},
-  //     {"name": "#SelectionEvent", "size": 1880},
-  //     {"name": "#TooltipEvent", "size": 1701},
-  //     {"name": "#VisualizationEvent", "size": 1117}
-  //   },
-// the following is data for the original static d3 graph
-// {
- // "name": "flare",
- // "children": [
- //  {
- //   "name": "vis",
- //   "children": [
-    // {
-    //  "name": "events",
-    //  "children": [
+
+    {
+     "name": "events",
+     "children": [
       {"name": "DataEvent", "size": 2313},
       {"name": "SelectionEvent", "size": 1880},
       {"name": "TooltipEvent", "size": 1701},
       {"name": "VisualizationEvent", "size": 1117}
-    //  ]
-    // },
-    // {"name": "Visualization", "size": 16540}
-//    ]
-//   }
-//  ]
-// }
+     ]
+    }
