@@ -34,11 +34,27 @@ class Tapi
 			lang: "en",
 			result_type: "recent"
 		}
+		@query = string
 		@data = []
 		@client.search(string, options).take(num).collect do |tweet|
 			@data.push({text: tweet.text})
 		end
-		return @data
+		sanitize
+		build
+		json
+	end
+
+	def json
+		arr =[]
+		@data.each do |word,occurences|
+			swh = {name: word, size: occurences}
+			arr.push swh
+		end
+
+		@data = {name: @query, children: arr }.to_json
+
+
+		"check #{self}.data for results"
 	end
 
 	def build
