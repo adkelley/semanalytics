@@ -41,7 +41,18 @@ class Tapi
 		end
 		sanitize
 		build
+		stopwords
 		json(threshold)
+	end
+
+	def stopwords
+		stop = IO.read("lib/stopwords.list").split()
+		@data.delete_if do |k|
+			if stop.include?(k)
+				puts "removing #{k}"
+				true
+			end
+		end
 	end
 
 	def json(threshold)
@@ -52,11 +63,7 @@ class Tapi
 				arr.push swh
 			end
 		end
-
 		@data = {name: @query, children: arr }.to_json
-
-
-		"check #{self}.data for results"
 	end
 
 	def build
@@ -77,7 +84,7 @@ class Tapi
 			#remove urls
 			tweet = t[:text].gsub(URI.regexp,'')
 
-			#remove symbols, except @
+			#remove symbols, except @ #
 			tweet = tweet.gsub(sym, '')
 
 			#remove newlines
