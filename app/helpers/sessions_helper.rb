@@ -15,13 +15,9 @@ module SessionsHelper
 
   def require_login
     if current_user == nil
-<<<<<<< HEAD
-      # redirect_to sign_in_path
-    end
-=======
+
       redirect_to "/sign_up"
      end
->>>>>>> 3b82a504ddb0909adf1760fd9a8c93bbdbe62291
   end
 
   def logout

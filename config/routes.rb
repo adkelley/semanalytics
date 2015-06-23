@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root to: "users#index"
   get "/d3", to: "welcome#index"
+  get "/json", to: "welcome#data"
   get "/users/", to: "user#index", as: "users"
   get "sign_up", to: "users#new"
   post "/users", to: "users#create"
