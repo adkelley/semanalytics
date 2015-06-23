@@ -1,12 +1,23 @@
 class TwitterController < ApplicationController
-	def search
-		begin
+	def data
+		if (params[:query])
 			t = Tapi.new
-			t.search(params[:query],500)
-			render :json => t.data
-		rescue RateLimitExceeded => e
-			@e = e
-			render :search
+			t.search(params[:query], 500)
+		else
+			t = Tapi.new
+			t.search("#tech", 500)
 		end
+		render :json => t.data
 	end
+
+	# def search
+	# 	begin
+	# 		t = Tapi.new
+	# 		t.search(params[:query],500)
+	# 		render :json => t.data
+	# 	rescue RateLimitExceeded => e
+	# 		@e = e
+	# 		render :search
+	# 	end
+	# end
 end

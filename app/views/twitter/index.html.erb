@@ -1,0 +1,8 @@
+<h1>twitter#index</h1>
+<%= form_tag "/twitter", method: 'post' do %>
+<%= label_tag :search, "search for" %>
+<%= text_field_tag :query %>
+<%= submit_tag "Search" %>
+<% end %>
+
+<%= puts @params %>

@@ -1,6 +1,6 @@
-$.getJSON('/json', function(data) {
-    console.debug(data);
-});
+// $.getJSON('/twitter', function(data) {
+//     console.debug(data);
+// });
 var diameter = 960,
     format = d3.format(",d"),
     color = d3.scale.category20c();
@@ -16,45 +16,45 @@ var svg = d3.select("body").append("svg")
     .attr("class", "bubble");
 
 // potential way to input new data
-var refreshGraph = function() {
-    d3.json("/json", function(error, root) {
-        if (error) throw error;
+// var refreshGraph = function() {
+//     d3.json("/twi", function(error, root) {
+//         if (error) throw error;
 
-        var node = svg.selectAll(".node")
-            .data(bubble.nodes(classes(root))
-                .filter(function(d) {
-                    return !d.children;
-                }))
-            .enter().append("g")
-            .attr("class", "node")
-            .attr("transform", function(d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            });
+//         var node = svg.selectAll(".node")
+//             .data(bubble.nodes(classes(root))
+//                 .filter(function(d) {
+//                     return !d.children;
+//                 }))
+//             .enter().append("g")
+//             .attr("class", "node")
+//             .attr("transform", function(d) {
+//                 return "translate(" + d.x + "," + d.y + ")";
+//             });
 
-        node.append("title")
-            .text(function(d) {
-                return d.className + ": " + format(d.value);
-            });
+//         node.append("title")
+//             .text(function(d) {
+//                 return d.className + ": " + format(d.value);
+//             });
 
-        node.append("circle")
-            .attr("r", function(d) {
-                return d.r;
-            })
-            .style("fill", function(d) {
-                return color(d.packageName);
-            });
+//         node.append("circle")
+//             .attr("r", function(d) {
+//                 return d.r;
+//             })
+//             .style("fill", function(d) {
+//                 return color(d.packageName);
+//             });
 
-        node.append("text")
-            .attr("dy", ".3em")
-            .style("text-anchor", "middle")
-            .text(function(d) {
-                return d.className.substring(0, d.r / 3);
-            });
-    });
-};
+//         node.append("text")
+//             .attr("dy", ".3em")
+//             .style("text-anchor", "middle")
+//             .text(function(d) {
+//                 return d.className.substring(0, d.r / 3);
+//             });
+//     });
+// };
 // this is the rendering portion of the d3, it recursively takes JSON children and colors
 // and appends them in relation to the current node that they exist in
-d3.json("/json", function(error, root) {
+d3.json("/twitter", function(error, root) {
     if (error) throw error;
 
     var node = svg.selectAll(".node")
