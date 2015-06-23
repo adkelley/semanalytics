@@ -14,6 +14,11 @@ class SessionsController < ApplicationController
     end
   end
 
+  def signout
+    logout
+    redirect_to "/sign_in"
+  end
+
   private
     def user_params
       @user_params = {}
