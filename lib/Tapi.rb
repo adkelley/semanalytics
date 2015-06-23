@@ -29,7 +29,7 @@ class Tapi
  #     ]
  #    }
 
-	def search(string,num)
+	def search(string,num,threshold = 5)
 		options = {
 			lang: "en",
 			result_type: "recent"
@@ -41,14 +41,16 @@ class Tapi
 		end
 		sanitize
 		build
-		json
+		json(threshold)
 	end
 
-	def json
+	def json(threshold)
 		arr =[]
 		@data.each do |word,occurences|
-			swh = {name: word, size: occurences}
-			arr.push swh
+			if (occurences > threshold)
+				swh = {name: word, size: occurences}
+				arr.push swh
+			end
 		end
 
 		@data = {name: @query, children: arr }.to_json
