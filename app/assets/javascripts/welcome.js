@@ -7,7 +7,7 @@ $(function() {
         query = $('#query').val();
         console.log(query);
         if (query !== '') {
-            $.get("/twitter/?query="+query).done(function(data){
+            $.get("/twitter/?query="+encodeURIComponent(query)).done(function(data){
                 //console.log(data);
                 draw(data);
             });
