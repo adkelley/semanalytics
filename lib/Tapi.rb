@@ -18,17 +18,6 @@ class Tapi
 	#then access with 
 	#  t.data
 
-
-	# {
- #     "name": "events",
- #     "children": [
- #      {"name": "DataEvent", "size": 2313},
- #      {"name": "SelectionEvent", "size": 1880},
- #      {"name": "TooltipEvent", "size": 1701},
- #      {"name": "VisualizationEvent", "size": 1117}
- #     ]
- #    }
-
 	def search(string,num,threshold = 5)
 		options = {
 			lang: "en",
@@ -73,7 +62,12 @@ class Tapi
 			freq[word] += 1 
 		}
 
+		#sort by frequency
 		@data = freq.sort_by {|_key, value| value}.reverse.to_h
+
+		#lets remove the first element which *should* be the query
+		#not always reliable if there's another word that ends up first
+		#@data.shift
 	end
 
 	def sanitize
