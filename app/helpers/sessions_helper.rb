@@ -6,7 +6,7 @@ module SessionsHelper
   end
 
   def current_user
-    @current_user ||= User.find(session[:user_id])
+    @current_user ||= session[:user_id] && User.find(session[:user_id])
   end
 
   def logged_in?
@@ -15,6 +15,7 @@ module SessionsHelper
 
   def require_login
     if current_user == nil
+
       redirect_to "/sign_up"
      end
   end
