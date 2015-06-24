@@ -3,6 +3,22 @@
 ### Basic MVP Scope
 A bubblecloud of individual words/hashtags that are found in a twitter api query. The larger the word, the more often it occurs. The query spans a set of time, and has some basic filtering/processing. We will use three models. User, Query, Tweet. 
 
+### Tuesday Evening Update
+It's all coming together. We have a basic MVP.  
+What are some possible things we could work on?  
+**Rate limiting** - it would be helpful to be able to see remaining API credits.  
+**User OAuth** - signing in users to their twitter profile for additional API credits.  
+**Save queries in DB** - this deserves some thought, does a query have a certain lifespan more  like a cache? or can users save specific queries in their profile for the longrun?  
+**Display Timespan & # of Tweets** - for each query, this would be helpful contextually.  
+**Loading animations** - feels really smooth  
+**Click to explore** - explore the network by clicking on an existing svg  
+**Color by avg followers** - average followers together and color words across a gradient so you can see if some terms are being pushed by extra popular users, or by regular people  
+**Link to Twitter** - I find myself regularly going to twitter to search word combinations in order to clarify the intent/meaning of patterns I'm seeing. We have the original tweets, is there any way to cleanly display this if desired  
+**Increasing interactivity** - with d3  
+**Word distance** - could be measured with colors  
+**User controls tweet depth** - could be really helpful, also could interact with limits    
+**Time Travel** - pull an until value first, and then take the tweet id and run a since_id to grab tweets that happened after a date
+
 
 ### Models - User, Query, Tweet 
 Relationships look like this.
