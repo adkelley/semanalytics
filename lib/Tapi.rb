@@ -21,8 +21,10 @@ class Tapi
 	def search(string,num,threshold = 5)
 		options = {
 			lang: "en",
+			count: 100,
 			result_type: "recent"
 		}
+		
 		@query = string
 		@data = []
 		@client.search(string, options).take(num).collect do |tweet|

@@ -14,6 +14,10 @@ What are some possible things we could work on?
 **Click to explore** - explore the network by clicking on an existing svg  
 **Color by avg followers** - average followers together and color words across a gradient so you can see if some terms are being pushed by extra popular users, or by regular people  
 **Link to Twitter** - I find myself regularly going to twitter to search word combinations in order to clarify the intent/meaning of patterns I'm seeing. We have the original tweets, is there any way to cleanly display this if desired  
+**Increasing interactivity** - with d3  
+**Word distance** - could be measured with colors  
+**User controls tweet depth** - could be really helpful, also could interact with limits    
+**Time Travel** - pull an until value first, and then take the tweet id and run a since_id to grab tweets that happened after a date
 
 
 ### Models - User, Query, Tweet 
