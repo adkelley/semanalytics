@@ -12,7 +12,7 @@ What are some possible things we could work on?
 **Display Timespan & # of Tweets** - for each query, this would be helpful contextually.  
 **Loading animations** - feels really smooth  
 **Click to explore** - explore the network by clicking on an existing svg  
-**Color by avg followers** - average followers together and color words across a gradient so you can see if some terms are being pushed by extra popular users, or by regular people
+**Color by avg followers** - average followers together and color words across a gradient so you can see if some terms are being pushed by extra popular users, or by regular people  
 **Link to Twitter** - I find myself regularly going to twitter to search word combinations in order to clarify the intent/meaning of patterns I'm seeing. We have the original tweets, is there any way to cleanly display this if desired  
 
 
