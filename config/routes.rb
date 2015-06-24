@@ -10,5 +10,6 @@ Rails.application.routes.draw do
   get "/sign_out", to: "sessions#signout"
 
   get "/twitter", to: "twitter#data"
+  post "/twitter", to: "twitter#threshold"
   get 'about/show'
 end
