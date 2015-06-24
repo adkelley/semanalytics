@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root to: "users#index"
-  get "/d3", to: "welcome#index"
+#  get "/d3", to: "welcome#index"
   get "/users/", to: "user#index", as: "users"
   get "sign_up", to: "users#new"
   post "/users", to: "users#create"
@@ -10,6 +10,6 @@ Rails.application.routes.draw do
   post "/sessions", to: "sessions#create"
   get "/sign_out", to: "sessions#signout"
 
-  get "/search/:query", to: "twitter#search"
+#  get "/search/:query", to: "twitter#search"
   get 'about/show'
 end
