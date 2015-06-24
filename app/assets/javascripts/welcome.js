@@ -34,6 +34,9 @@ function draw (root) {
         .attr("width", diameter)
         .attr("height", diameter)
         .attr("class", "bubble");
+    var div = d3.select("body").append("div")
+        .attr('class', 'tooltip')
+        .style("opacity", 0);
 
     var node = svg.selectAll(".node")
         .data(bubble.nodes(classes(root))
@@ -100,7 +103,7 @@ function show_details(data, i, element) {
     d3.select(element).attr("stroke", "black");
     var content = "<span class=\"name\">Title:</span><span class=\"value\"> " + data.name + "</span><br/>";
     content +="<span class=\"name\">Amount:</span><span class=\"value\"> " + data.size + "</span><br/>";
-    // content +="<span class=\"name\">Year:</span><span class=\"value\"> " + data.year + "</span>";
-    // tooltip.showTooltip(content, d3.event);
   }
-
+function hide_details(data, i, element) {
+    d3.select(element).attr("stroke", "white");
+  }
