@@ -40,6 +40,8 @@ class Tapi
 			if stop.include?(k)
 				puts "removing #{k}"
 				true
+			else
+				k == @query
 			end
 		end
 	end
