@@ -6,13 +6,7 @@ class TwitterController < ApplicationController
           #if current_user
 	    if (params[:query])
 	     t = Tapi.new
-	     puts "*"*50
-             begin
              t.search(params[:query], 500, params[:min].to_i, params[:max].to_i)
-	     ensure
-               p t
-               return render text: t.errors
-             end
             else
 	      t = Tapi.new
 	      t.search("#tech", 500)
