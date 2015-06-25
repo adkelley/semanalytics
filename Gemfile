@@ -37,8 +37,13 @@ gem 'twitter'
 # ffaker for seeding the database
 gem 'ffaker'
 
+# for caching pages, ideally json page data
+gem 'actionpack-page_caching'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
+
+gem 'unicorn-rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
