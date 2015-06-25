@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     @user = User.confirm(user_params)
     if @user
       login(@user)
-      render "layouts/application"
+      redirect_to "/"
     else
       redirect_to "/"
       flash[:error] = "Invalid email or password. Please try again."
