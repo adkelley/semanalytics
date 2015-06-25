@@ -19,14 +19,12 @@ class UsersController < ApplicationController
         format.html { redirect_to "/", notice: 'User was successsfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
+        format.html { redirect_to "/" }
         if User.find_by_email(user_params[:email])
           flash[:error] = "This account already exists, please sign in instead"
-          render :partial => "sessions/new.html.erb"
         else
-          format.html { redirect_to "/" }
           flash[:error] = "Invalid, email address or password"
         end
-        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
