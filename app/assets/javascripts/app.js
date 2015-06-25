@@ -2,7 +2,7 @@
  $(function() {
    var defaultQuery = "warriors"
    var minWC = "5"  // min word count
-   var maxWC = "5"  // max word count
+   var maxWC = "100"  // max word count
    var $submit = $('#submit-query');
     $submit.on("click", function(e) {
         e.preventDefault();
@@ -88,13 +88,13 @@ function draw(root) {
             return color(d.packageName);
         })
         .transition()
-        .duration(duration * 20)
+        .duration(duration * 30)
             .style('opacity', 1)
             .attr("r", function(d) {
             return d.r;
         });
     node.transition()
-        .duration(duration * 20)
+        .duration(duration * 60)
             .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
@@ -107,7 +107,7 @@ function draw(root) {
             return d.className.substring(0, d.r / 3);
         })
         .transition()
-        .duration(duration * 20)
+        .duration(duration * 50)
             .style('opacity', 1);
 
 
