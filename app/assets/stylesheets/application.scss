@@ -3,7 +3,7 @@
 
 
 .navbar {
-    font-family: "brandon-grotesque-bold", sans-serif;
+   font-family: "aktiv-grotesk",sans-serif;
 }
 
 /* make sidebar nav vertical */ 
@@ -19,11 +19,16 @@
 }
 
 .modal-content {
-    font-family: "brandon-grotesque-bold", sans-serif;
+   font-family: "aktiv-grotesk",sans-serif;
+}
+
+.btn-primary, .form-control {
+  margin-top: 5px;
 }
 
 body {
   padding-top: 60px;
+  font-family: "aktiv-grotesk",sans-serif;
 }
 
 #left-col {
@@ -36,9 +41,18 @@ div.tooltip {
 	width: 100px;
 	height: 28px;
 	padding: 2px;
-	font: 12px sans-serif;
+	font: 12px "aktiv-grotesk", sans-serif;
 	background: lightsteelblue;
 	border: 0px;
 	border-radius: 8px;
 	pointer-events: none;
 }
+
+
+
+
+
+
+
+
+
