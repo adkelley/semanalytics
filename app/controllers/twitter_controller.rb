@@ -1,5 +1,5 @@
 class TwitterController < ApplicationController
-  include Tapi
+  require "tapi"
 
 	def data
           #binding.pry
