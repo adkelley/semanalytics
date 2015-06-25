@@ -35,21 +35,22 @@
 
  
 function draw(root) {
-    var diameter = 960,
+    var height = 960,
+        width = 1260,
         format = d3.format(",d"),
         duration = 200,
         color = d3.scale.category20c();
 
-    d3.select(self.frameElement).style("height", diameter + "px");
+    d3.select(self.frameElement).style("height", height + "px");
 
     var bubble = d3.layout.pack()
         .sort(null)
-        .size([diameter, diameter])
+        .size([width, height])
         .padding(1.5);
 
     var svg = d3.select("body").append("svg")
-        .attr("width", diameter)
-        .attr("height", diameter)
+        .attr("width", width)
+        .attr("height", height)
         .attr("class", "bubble");
 
     var div = d3.select("body").append("div")

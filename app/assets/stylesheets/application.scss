@@ -5,6 +5,11 @@
 
 body {
   padding-top: 60px;
+  background: url("../images/back_place.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 #left-col {
@@ -19,7 +24,7 @@ body {
   }
   .sidebar-nav .navbar {
     display: block;
-    opacity: 0.5;
+    opacity: 0.8;
   }
 }
 
