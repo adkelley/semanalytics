@@ -9,11 +9,14 @@
         if ($('svg.bubble').length > 0) {$('svg.bubble').remove()}
         query = $('#search-query').val() || defaultQuery;
         minWC = $('#min-word-count').val() || minWC
+        maxWC = $('#max-word-count').val() || maxWC
         console.log(query);
         console.log(minWC);
+        console.log(maxWC);
         if (query !== '') {
             $.get("/twitter/?query="+encodeURIComponent(query) +
-                  "&min="+minWC).done(function(data){
+                  "&min=" + minWC +
+                  "&max=" + maxWC).done(function(data){
                 //console.log(data);
                 draw(data);
             });
@@ -23,8 +26,9 @@
 
     });
              $.get("/twitter/?query="+encodeURIComponent(defaultQuery) +
-                   "&max="+maxWC).done(function(data){
-             draw(data);
+                  "&min=" + minWC +
+                  "&max=" + maxWC).done(function(data) {
+                    draw(data);
              });
 
 })

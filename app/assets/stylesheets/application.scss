@@ -2,33 +2,27 @@
 @import "bootstrap";
 
 
+
 body {
   padding-top: 60px;
 }
 
 
+#left-col {
+  position: fixed;
+}
+
 /* make sidebar nav vertical */ 
 @media (min-width: 768px) {
   .sidebar-nav .navbar .navbar-collapse {
-    padding: 0;
+    padding: 0px;
     max-height: none;
   }
-  .sidebar-nav .navbar ul {
-    float: none;
-  }
-  .sidebar-nav .navbar ul:not {
+  .sidebar-nav .navbar {
     display: block;
-  }
-  .sidebar-nav .navbar li {
-    float: none;
-    display: block;
-  }
-  .sidebar-nav .navbar li a {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    opacity: 0.5;
   }
 }
-
 
 text {
 	font: 12px sans-serif;
