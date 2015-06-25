@@ -6,6 +6,7 @@ ruby '2.2.1'
 gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
+gem 'rails_12factor', group: :production
 # Bootstrap rails
 gem 'bootstrap-sass', '~> 3.3.4'
 # Use SCSS for stylesheets
