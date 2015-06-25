@@ -18,23 +18,23 @@ class Tapi
   #then access with 
   #  t.data
 
-  def search(string,num,threshold = 5)
+  def search(string,num,min_occur = 5, max_occur = 100)
     options = {
       lang: "en",
       count: 100,
       result_type: "recent"
-      }
+    }
     
     @query = string
     @data = []
     @client.search(string, options).take(num).collect do |tweet|
       @data.push({text: tweet.text})
-      end
+    end
     sanitize
     build
     stopwords
-    json(threshold)
-    end
+    json(min_occur, max_occur)
+  end
 
   def stopwords
     stop = IO.read("lib/stopwords.list").split()
@@ -48,11 +48,11 @@ class Tapi
       end
     end
 
-  def json(threshold)
+  def json(min_occur, max_occur)
     arr =[]
-    @data.each do |word,occurences|
-      if (occurences > threshold)
-        swh = {name: word, size: occurences}
+    @data.each do |word,occurrences|
+      if (occurrences >= min_occur && occurrences <= max_occur )
+        swh = {name: word, size: occurrences}
         arr.push swh
         end
       end

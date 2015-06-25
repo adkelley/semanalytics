@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
       login(@user)
       redirect_to "/users/#{@user.id}"
     else
+      flash[:error] = "Sorry, invalid email or password"
       redirect_to "/"
     end
   end
