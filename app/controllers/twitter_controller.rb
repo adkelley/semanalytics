@@ -1,5 +1,5 @@
 class TwitterController < ApplicationController
-  require "tapi"
+  require "./lib/Tapi.rb"
 
 	def data
           #binding.pry
