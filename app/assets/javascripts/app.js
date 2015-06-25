@@ -139,7 +139,7 @@ function show_details(data, i, element) {
 }
 
 function hide_details(data, i, element) {
-    d3.select(element).attr("stroke", "white");
+    d3.select(element).attr("stroke", "null");
 }
 function get_random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
