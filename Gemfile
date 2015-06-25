@@ -18,6 +18,7 @@ gem 'coffee-rails', '~> 4.1.0'
 
 #nlp processing gems
 gem 'tf-idf-similarity'
+gem 'narray-devel', :git => 'https://github.com/masa16/narray-devel'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

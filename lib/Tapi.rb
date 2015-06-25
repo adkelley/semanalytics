@@ -1,5 +1,5 @@
 class Tapi
-	attr_reader :data
+	attr_reader :data_sanitize, :data_stopwords, :data_build, :data_json, :data_corpus, :data
 	def initialize
 		@client = Twitter::REST::Client.new do |config|
 			config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
@@ -26,19 +26,49 @@ class Tapi
 		}
 		
 		@query = string
-		@data = []
+		data = []
+
 		@client.search(string, options).take(num).collect do |tweet|
-			@data.push({text: tweet.text})
+			data.push({text: tweet.text})
 		end
-		sanitize
-		build
-		stopwords
-		json(threshold)
+
+		json(
+			stopwords(
+				build(
+					sane_data = sanitize(data)
+					)
+				)
+			)
+
+		corpus (
+			sane_data
+			)
+
 	end
 
-	def stopwords
+	def corpus(data)
+		@data_corpus = []
+		data.each do |d|
+			@data_corpus.push( TfIdfSimilarity::Document.new(d) )
+		end
+
+		@data_corpus
+	end
+
+	def json(data, min_word_count = 5)
+		arr =[]
+		data.each do |word,occurences|
+			if (occurences > min_word_count)
+				swh = {name: word, size: occurences}
+				arr.push swh
+			end
+		end
+		@data_json = {name: @query, children: arr }.to_json
+	end
+
+	def stopwords(data)
 		stop = IO.read("lib/stopwords.list").split()
-		@data.delete_if do |k|
+		data.delete_if do |k|
 			if stop.include?(k)
 				puts "removing #{k}"
 				true
@@ -46,38 +76,25 @@ class Tapi
 				k == @query
 			end
 		end
+		@data_stopwords = data
 	end
 
-	def json(threshold)
-		arr =[]
-		@data.each do |word,occurences|
-			if (occurences > threshold)
-				swh = {name: word, size: occurences}
-				arr.push swh
-			end
-		end
-		@data = {name: @query, children: arr }.to_json
-	end
-
-	def build
+	def build(data)
 		freq = Hash.new(0)
-		words = @data.join(' ').split(' ')
+		words = data.join(' ').split(' ')
 		words.each { |word| 
 			freq[word] += 1 
 		}
 
 		#sort by frequency
-		@data = freq.sort_by {|_key, value| value}.reverse.to_h
+		@data_build = freq.sort_by {|_key, value| value}.reverse.to_h
 
-		#lets remove the first element which *should* be the query
-		#not always reliable if there's another word that ends up first
-		#@data.shift
 	end
 
-	def sanitize
+	def sanitize(data)
 		sym = /[^a-zA-Z\d\s@#]/
 		# &amp; can also be a thing
-		@newdata = @data.map { |t|
+		@data_sanitize = data.map { |t|
 
 			#remove urls
 			tweet = t[:text].gsub(URI.regexp,'')
@@ -94,7 +111,7 @@ class Tapi
 			#downcase
 			tweet = tweet.downcase
 		}
-		@data = @newdata
+		@data_sanitize
 	end
 
 
