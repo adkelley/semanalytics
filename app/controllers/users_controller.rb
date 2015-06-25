@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
+  before_filter :redirect_unauthenticated, except: [:new, :index, :create]
+
   def index
+    @user = current_user
     render :index
   end
 

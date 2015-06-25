@@ -2,25 +2,15 @@
 @import "bootstrap";
 
 
-
-body {
-  padding-top: 60px;
-  background: url("../images/back_place.jpg") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
-#left-col {
-  position: fixed;
+.navbar {
+    font-family: "brandon-grotesque-bold", sans-serif;
 }
 
 /* make sidebar nav vertical */ 
 @media (min-width: 768px) {
   .sidebar-nav .navbar .navbar-collapse {
     padding: 0px;
-    max-height: none;
+    height: 50px;
   }
   .sidebar-nav .navbar {
     display: block;
@@ -28,9 +18,18 @@ body {
   }
 }
 
-text {
-	font: 12px sans-serif;
+.modal-content {
+    font-family: "brandon-grotesque-bold", sans-serif;
 }
+
+body {
+  padding-top: 60px;
+}
+
+#left-col {
+  position: fixed;
+}
+
 div.tooltip {
 	position: absolute;
 	text-align: center;
