@@ -1,4 +1,6 @@
 class TwitterController < ApplicationController
+  include Tapi
+
 	def data
           #binding.pry
           #if current_user
