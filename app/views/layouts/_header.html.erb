@@ -9,10 +9,11 @@
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
           <li class="active"><%= link_to "About", about_show_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#about-modal-window'} %></li>
+          <li class="active"><%= link_to "Log Out", sign_out_path %></li>
         <% else %>
           <li class="active"><%= link_to "About", about_show_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#about-modal-window'} %></li>
-          <li class="active"><%= link_to "Sign In", sign_in_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#sign_in-modal-window'} %></li>
           <li class="active"><%= link_to "Sign Up", sign_up_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#sign_up-modal-window'} %></li>
+          <li class="active"><%= link_to "Log In", sign_in_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#sign_in-modal-window'} %></li>
         <% end %>
       </ul>
     </div>

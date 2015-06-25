@@ -8,16 +8,18 @@ class SessionsController < ApplicationController
     @user = User.confirm(user_params)
     if @user
       login(@user)
-      redirect_to "/users/#{@user.id}"
+      #redirect_to "/"
+      render "layouts/application"
     else
-      flash[:error] = "Sorry, invalid email or password"
       redirect_to "/"
+      flash[:error] = "Invalid email or password. Please try again."
     end
   end
 
   def signout
     logout
-    redirect_to "/sign_in"
+    redirect_to "/"
+    flash[:success] = "Successfully logged out"
   end
 
   private

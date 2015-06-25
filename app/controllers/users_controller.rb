@@ -23,7 +23,7 @@ class UsersController < ApplicationController
         if User.find_by_email(user_params[:email])
           flash[:error] = "This account already exists, please sign in instead"
         else
-          flash[:error] = "Invalid, email address or password"
+          flash[:error] = "Invalid, email address or password.  Please try again"
         end
       end
     end
