@@ -8,7 +8,6 @@ class SessionsController < ApplicationController
     @user = User.confirm(user_params)
     if @user
       login(@user)
-      #redirect_to "/"
       render "layouts/application"
     else
       redirect_to "/"
