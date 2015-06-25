@@ -9,7 +9,7 @@ class TwitterController < ApplicationController
              t.search(params[:query], 500, params[:min].to_i, params[:max].to_i)
 	     ensure
                p t
-               puts "*"*50
+               return render json:  t.errors
              end
             else
 	      t = Tapi.new
