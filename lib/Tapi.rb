@@ -1,5 +1,6 @@
 class Tapi
-	attr_reader :tweets, :data_stopwords, :words, :data_json, :data_corpus, :build, :query_word
+	attr_reader :tweets, :data_stopwords, :words, :data_json, :data_corpus, :build, :data
+
 	def initialize(string,num, seed_min = 4)
 		@client = Twitter::REST::Client.new do |config|
 			config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
@@ -20,6 +21,10 @@ class Tapi
 	#then access with 
 	#  t.data
 
+	def self.query_word?
+		@@query_word
+	end
+
 	def search(string,num,seed_min = 4, seed_max = 5000)
 		@seed_min = seed_min
 		@seed_max = seed_max
@@ -29,8 +34,8 @@ class Tapi
 			result_type: "recent"
 		}
 		
-		@query_word = string
-		@query = @query_word.to_s + " -rt"
+		@@query_word = string
+		@query = @@query_word.to_s + " -rt"
 		data = []
 
 		@client.search((@query), options).take(num).collect do |tweet|
@@ -41,16 +46,21 @@ class Tapi
 			sanitize(data)
 		)
 
+		#loads data associations
+		Corpus.load(@words,@tweets)
+
+		#formats and outputs data
+		@data = Group.data_out.to_json
 	end
 
-	def corpus(data)
-		@data_corpus = []
-		data.each do |d|
-			@data_corpus.push( TfIdfSimilarity::Document.new(d) )
-		end
+	# def corpus(data)
+	# 	@data_corpus = []
+	# 	data.each do |d|
+	# 		@data_corpus.push( TfIdfSimilarity::Document.new(d) )
+	# 	end
 
-		@data_corpus
-	end
+	# 	@data_corpus
+	# end
 
 	# def json(data, min_word_count = 5)
 	# 	arr =[]
@@ -71,7 +81,7 @@ class Tapi
 				true
 			else
 				#returns false if it equals query
-				k == @query_word
+				k == @@query_word
 			end
 		end
 	end

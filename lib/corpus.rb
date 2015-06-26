@@ -151,10 +151,10 @@ class Corpus
 		end
 	end
 
-	def self.load(tapi = Tapi.new("denver",500))
-		tapi.words.each do |w|
+	def self.load(words,tweets)
+		words.each do |w|
 			word = Corpus.new(w[:name], w[:seed_relationship])
-			tapi.tweets.each do |tweet|
+			tweets.each do |tweet|
 				twords = tweet.split()
 				if twords.include?(word.name)
 					word.tweets << tweet
@@ -164,7 +164,7 @@ class Corpus
 
 		Corpus.build_relations
 		Corpus.break_into_groups
-		return tapi.query_word.to_s + " loaded successfully"
+		return "Corpus loaded successfully"
 	end
 
 	def self.all
@@ -178,7 +178,7 @@ class Corpus
 	#defines core, and builds relations
 	def self.build_relations
 		a = Time.now()
-		@@list[0..9].each do |obj|
+		@@list[0..20].each do |obj|
 			obj.isCore = true
 			@@core << obj
 		end
@@ -200,7 +200,7 @@ class Corpus
 	def relate_to
 
 		#each object of the core except yourself
-		@@list[0..100].each do |obj|
+		@@list[0..150].each do |obj|
 			if (obj != self) 
 				related = 0
 

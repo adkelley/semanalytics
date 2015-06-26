@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
   def index
-    @tapi = Tapi.new
-    @tapi.search("#warriors", 500)
     render :index
   end
 

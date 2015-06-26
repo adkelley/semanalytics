@@ -4,16 +4,14 @@ class TwitterController < ApplicationController
 
 	def data
 		if (params[:query])
-			t = Tapi.new
-                        #binding.pry
-                        if params[:min]
-			  t.search(params[:query], 500, @@max_word_count)
-                        else
-			  t.search(params[:query], 500)
-                        end
+	            #binding.pry
+	            if params[:min]
+	 				t = Tapi.new(params[:query], 1000, @@min_word_count)
+	            else
+	  				t = Tapi.new(params[:query], 1000)
+	            end
 		else
-			t = Tapi.new
-			t.search("#tech", 500)
+			t = Tapi.new("drugs", 500)
 		end
 		render :json => t.data
 	end

@@ -43,6 +43,24 @@ class Group
 		false
 	end
 
+	def out
+		arr = []
+		@words.each {|word|
+			arr << {name: word.name, size: word.seed_relationship}
+		}
+
+		{name: self.name, children: arr}
+	end
+
+	def self.data_out
+		arr = []
+		Group.list.each {|g|
+			arr << g.out 
+		}
+
+		{name: Tapi.query_word?, children: arr}
+	end
+
 	def self.list
 		return @@group_list
 	end
