@@ -1,12 +1,14 @@
 //on window load
- $(function() {
-   var defaultQuery = "warriors"
-   var minWC = "5"  // min word count
-   var maxWC = "100"  // max word count
-   var $submit = $('#submit-query');
+$(function() {
+    var defaultQuery = "warriors"
+    var minWC = "5" // min word count
+    var maxWC = "100" // max word count
+    var $submit = $('#submit-query');
     $submit.on("click", function(e) {
         e.preventDefault();
-        if ($('svg.bubble').length > 0) {$('svg.bubble').remove()}
+        if ($('svg.bubble').length > 0) {
+            $('svg.bubble').remove()
+        }
         query = $('#search-query').val() || defaultQuery;
         minWC = $('#min-word-count').val() || minWC
         maxWC = $('#max-word-count').val() || maxWC
@@ -14,9 +16,9 @@
         console.log(minWC);
         console.log(maxWC);
         if (query !== '') {
-            $.get("/twitter/?query="+encodeURIComponent(query) +
-                  "&min=" + minWC +
-                  "&max=" + maxWC).done(function(data){
+            $.get("/twitter/?query=" + encodeURIComponent(query) +
+                "&min=" + minWC +
+                "&max=" + maxWC).done(function(data) {
                 //console.log(data);
                 draw(data);
             });
@@ -25,15 +27,14 @@
         }
 
     });
-             $.get("/twitter/?query="+encodeURIComponent(defaultQuery) +
-                  "&min=" + minWC +
-                  "&max=" + maxWC).done(function(data) {
-                    draw(data);
-             });
-
+    $.get("/twitter/?query=" + encodeURIComponent(defaultQuery) +
+        "&min=" + minWC +
+        "&max=" + maxWC).done(function(data) {
+        draw(data);
+    });
 })
 
- 
+
 function draw(root) {
     var height = 960,
         width = 1260,
@@ -66,7 +67,7 @@ function draw(root) {
         .attr("class", "node")
         .attr("transform", function(d) {
             return "translate(" + get_random(1, 959) + "," + get_random(1, 959) + ")";
-            })  
+        })
         .on("mouseover", function(d, i) {
             div.transition()
                 .duration(200)
@@ -90,13 +91,13 @@ function draw(root) {
         })
         .transition()
         .duration(duration * 30)
-            .style('opacity', 1)
-            .attr("r", function(d) {
+        .style('opacity', 1)
+        .attr("r", function(d) {
             return d.r;
         });
     node.transition()
         .duration(duration * 60)
-            .attr("transform", function(d) {
+        .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
 
@@ -109,8 +110,28 @@ function draw(root) {
         })
         .transition()
         .duration(duration * 50)
-            .style('opacity', 1);
+        .style('opacity', 1);
 
+        var defaultQuery = "warriors"
+        var minWC = "5" // min word count
+        var maxWC = "100" // max word coun
+        var $text = $('text');
+        $text.on("click", function(e) {
+                e.preventDefault();
+                if ($('svg.bubble').length > 0 && $(this).text()) {
+                    $('svg.bubble').remove();
+                    $('.tooltip').remove()
+                }
+                query = $(this).text() || defaultQuery;
+                $.get("/twitter/?query=" + encodeURIComponent(query) +
+                    "&min=" + minWC +
+                    "&max=" + maxWC).done(function(data) {
+                    //console.log(data);
+                    draw(data);
+                });
+                console.log($(this).text());
+
+            });
 
 }
 
@@ -135,13 +156,14 @@ function classes(root) {
     };
 }
 
-function show_details(data, i, element) {
+function show_details(d, i, element) {
     d3.select(element).attr("stroke", "black");
 }
 
-function hide_details(data, i, element) {
+function hide_details(d, i, element) {
     d3.select(element).attr("stroke", "null");
 }
+
 function get_random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
