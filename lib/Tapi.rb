@@ -1,12 +1,14 @@
 class Tapi
-	attr_reader :data_sanitize, :data_stopwords, :data_build, :data_json, :data_corpus, :data
-	def initialize
+	attr_reader :tweets, :data_stopwords, :words, :data_json, :data_corpus, :build, :query_word
+	def initialize(string,num, seed_min = 4)
 		@client = Twitter::REST::Client.new do |config|
 			config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
 			config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
 			config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
 			config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
+			
 		end
+		search(string,num,seed_min)
 	end
 
 	#to access, create a new Tapi
@@ -18,31 +20,26 @@ class Tapi
 	#then access with 
 	#  t.data
 
-	def search(string,num,threshold = 5)
+	def search(string,num,seed_min = 4, seed_max = 5000)
+		@seed_min = seed_min
+		@seed_max = seed_max
 		options = {
 			lang: "en",
 			count: 100,
 			result_type: "recent"
 		}
 		
-		@query = string
+		@query_word = string
+		@query = @query_word.to_s + " -rt"
 		data = []
 
-		@client.search(string, options).take(num).collect do |tweet|
+		@client.search((@query), options).take(num).collect do |tweet|
 			data.push({text: tweet.text})
 		end
 
-		json(
-			stopwords(
-				build(
-					sane_data = sanitize(data)
-					)
-				)
-			)
-
-		corpus (
-			sane_data
-			)
+		build(
+			sanitize(data)
+		)
 
 	end
 
@@ -55,46 +52,66 @@ class Tapi
 		@data_corpus
 	end
 
-	def json(data, min_word_count = 5)
-		arr =[]
-		data.each do |word,occurences|
-			if (occurences > min_word_count)
-				swh = {name: word, size: occurences}
-				arr.push swh
-			end
-		end
-		@data_json = {name: @query, children: arr }.to_json
-	end
+	# def json(data, min_word_count = 5)
+	# 	arr =[]
+	# 	data.each do |word,occurences|
+	# 		if (occurences > min_word_count)
+	# 			swh = {name: word, size: occurences}
+	# 			arr.push swh
+	# 		end
+	# 	end
+	# 	@data_json = {name: @query, children: arr }.to_json
+	# end
 
 	def stopwords(data)
 		stop = IO.read("lib/stopwords.list").split()
 		data.delete_if do |k|
 			if stop.include?(k)
-				puts "removing #{k}"
+				#deletes on true
 				true
 			else
-				k == @query
+				#returns false if it equals query
+				k == @query_word
 			end
 		end
-		@data_stopwords = data
+	end
+
+	def seed_min_max(data)
+		puts data.length
+		data.delete_if do |k,v|
+			v <= @seed_min || @seed_max < v
+		end
+		puts data.length
+		data
 	end
 
 	def build(data)
-		freq = Hash.new(0)
+		arr = []
+		straight_hash = Hash.new(0)
 		words = data.join(' ').split(' ')
 		words.each { |word| 
-			freq[word] += 1 
+			straight_hash[word] += 1
 		}
 
-		#sort by frequency
-		@data_build = freq.sort_by {|_key, value| value}.reverse.to_h
+		#get rid of stopwords before we start heavy processing
+		straight_hash = stopwords(straight_hash)
 
+		#filter out relatedness to seed above/below thresholds
+		straight_hash = seed_min_max(straight_hash)
+
+		#sort by frequency
+		straight_hash = straight_hash.sort_by {|_key, value| value}.reverse.to_h
+
+		straight_hash.each {|k,v|
+			arr <<	{ name: k, seed_relationship: v }
+		}
+		@words = arr
 	end
 
 	def sanitize(data)
 		sym = /[^a-zA-Z\d\s@#]/
 		# &amp; can also be a thing
-		@data_sanitize = data.map { |t|
+		@tweets = data.map { |t|
 
 			#remove urls
 			tweet = t[:text].gsub(URI.regexp,'')
@@ -111,8 +128,11 @@ class Tapi
 			#downcase
 			tweet = tweet.downcase
 		}
-		@data_sanitize
+
+		#lets keep it unique, sorry retwitters
+		@tweets = @tweets.uniq
 	end
+
 
 
 end
