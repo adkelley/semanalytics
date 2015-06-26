@@ -11,6 +11,7 @@ require 'ffaker'
     new_query = Query.new
     new_query.query_string = FFaker::HipsterIpsum.word
     new_query.word_count_min = 5
+    new_query.word_count_max = 100
     new_query.utility_words = false
     new_query.save
     new_user.queries << new_query

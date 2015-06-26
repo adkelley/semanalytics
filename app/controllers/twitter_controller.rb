@@ -1,4 +1,5 @@
 class TwitterController < ApplicationController
+  include SessionsHelper
   require "./lib/Tapi.rb"
 
 	def data
@@ -6,6 +7,15 @@ class TwitterController < ApplicationController
           #binding.pry
           #if current_user
 	    if (params[:query])
+             user = current_user
+             if user
+               query_params = {}
+               query_params[:query_string] = params[:query]
+               query_params[:word_count_min] = params[:min].to_i
+               query_params[:word_count_max] = params[:max].to_i
+               new_query = Query.new(query_params)
+               user.queries << new_query
+             end
 	     t = Tapi.new(params[:query], 1000, params[:min].to_i, params[:max].to_i)
             else
 	      t = Tapi.new("#tech", 500,4,5000)

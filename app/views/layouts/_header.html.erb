@@ -2,13 +2,19 @@
   <div class="container-fluid">
 
     <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
       <a class="navbar-brand" href="/">Semanalytics</a>
     </div>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="navbar-navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
           <li><%= link_to "About", about_show_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#about-modal-window'} %></li>
+          <li><%= link_to "Profile", profile_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#profile-modal-window'} %></li>
           <li><%= link_to "Log Out", sign_out_path %></li>
         <% else %>
           <li><%= link_to "About", about_show_path, {:remote => true, 'data-toggle' => "modal", 'data-target' => '#about-modal-window'} %></li>

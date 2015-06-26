@@ -1,0 +1,28 @@
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="ProfileModalLabel">User Profile</h4>
+    </div>
+    <div class="modal-body">
+      <h4>Email Address:</h4><em><%= @user.email %></em></br>
+      <table style="width:100%">
+        <tr>
+          <th>Query</th>
+          <th>Min Word Count</th>
+          <th>Max Word Count</th>
+        </tr>
+        <% @queries.each do |q| %>
+        <tr>
+          <td><%= q.query_string %></td>
+          <td><%= q.word_count_min %></td> 
+          <td><%= q.word_count_max %></td>
+        </tr>
+        <% end %>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
