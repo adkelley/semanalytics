@@ -8,7 +8,7 @@ class TwitterController < ApplicationController
 	    if (params[:query])
 	     t = Tapi.new(params[:query], 1000, params[:min].to_i, params[:max].to_i)
             else
-	      t = Tapi.new("#tech", 500)
+	      t = Tapi.new("#tech", 500,4,5000)
 	    end
 	    render :json => t.data
           # else

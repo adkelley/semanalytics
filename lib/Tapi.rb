@@ -1,8 +1,7 @@
 class Tapi
-<<<<<<< HEAD
 	attr_reader :tweets, :data_stopwords, :words, :data_json, :data_corpus, :build, :data
 
-	def initialize(string,num, seed_min = 4)
+	def initialize(string,num,seed_min = 4,seed_max=5000)
 		@client = Twitter::REST::Client.new do |config|
 			config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
 			config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
@@ -12,17 +11,6 @@ class Tapi
 		end
 		search(string,num,seed_min)
 	end
-=======
-  attr_reader :data
-  def initialize
-    @client = Twitter::REST::Client.new do |config|
-      config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
-      config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
-      config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
-      config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
-      end
-    end
->>>>>>> development
 
   #to access, create a new Tapi
   #  t = Tapi.new
@@ -33,12 +21,11 @@ class Tapi
   #then access with 
   #  t.data
 
-<<<<<<< HEAD
 	def self.query_word?
 		@@query_word
 	end
 
-	def search(string,num,seed_min = 4, seed_max = 5000)
+	def search(string, num, seed_min = 4, seed_max = 5000)
 		@seed_min = seed_min
 		@seed_max = seed_max
 		options = {
@@ -108,6 +95,19 @@ class Tapi
 		data
 	end
 
+	def stopwords(data)
+	stop = IO.read("lib/stopwords.list").split()
+		data.delete_if do |k|
+			if stop.include?(k)
+				#deletes on true
+				true
+			else
+				#returns false if it equals query
+				k == @@query_word
+			end
+		end
+	end
+
 	def build(data)
 		arr = []
 		straight_hash = Hash.new(0)
@@ -125,78 +125,24 @@ class Tapi
 		#sort by frequency
 		straight_hash = straight_hash.sort_by {|_key, value| value}.reverse.to_h
 
+		#filter min_occur & max_occur
+		 # if (occurrences >= min_occur && occurrences <= max_occur )
+	  #       swh = {name: word, size: occurrences}
+	  #       arr.push swh
+	  #       end
+   #       end
+
+
 		straight_hash.each {|k,v|
 			arr <<	{ name: k, seed_relationship: v }
 		}
 		@words = arr
 	end
 
-	def sanitize(data)
-		sym = /[^a-zA-Z\d\s@#]/
-		# &amp; can also be a thing
-		@tweets = data.map { |t|
-=======
-  def search(string,num,min_occur = 5, max_occur = 100)
-    options = {
-      lang: "en",
-      count: 100,
-      result_type: "recent"
-    }
+  def sanitize(data)
+      sym = /[^a-zA-Z\d\s@#]/
     
-    @query = string
-    @data = []
-    @client.search(string, options).take(num).collect do |tweet|
-      @data.push({text: tweet.text})
-    end
-    sanitize
-    build
-    stopwords
-    json(min_occur, max_occur)
-  end
-
-  def stopwords
-    stop = IO.read("lib/stopwords.list").split()
-    @data.delete_if do |k|
-      if stop.include?(k)
-        puts "removing #{k}"
-        true
-        else
-          k == @query
-          end
-      end
-    end
-
-  def json(min_occur, max_occur)
-    arr =[]
-    @data.each do |word,occurrences|
-      if (occurrences >= min_occur && occurrences <= max_occur )
-        swh = {name: word, size: occurrences}
-        arr.push swh
-        end
-      end
-    @data = {name: @query, children: arr }.to_json
-    end
-
-  def build
-    freq = Hash.new(0)
-    words = @data.join(' ').split(' ')
-    words.each { |word| 
-      freq[word] += 1 
-      }
-
-    #sort by frequency
-    @data = freq.sort_by {|_key, value| value}.reverse.to_h
-
-    #lets remove the first element which *should* be the query
-    #not always reliable if there's another word that ends up first
-    #@data.shift
-    end
-
-  def sanitize
-    sym = /[^a-zA-Z\d\s@#]/
-    # &amp; can also be a thing
-    @newdata = @data.map { |t|
->>>>>>> development
+     @tweets = data.map { |t|
 
       #remove urls
       tweet = t[:text].gsub(URI.regexp,'')
@@ -210,25 +156,13 @@ class Tapi
       #remove single characters
       tweet = tweet.gsub(/\s.\s/,' ')
 
-<<<<<<< HEAD
-			#downcase
-			tweet = tweet.downcase
-		}
+	  #downcase
+	  tweet = tweet.downcase
 
-		#lets keep it unique, sorry retwitters
-		@tweets = @tweets.uniq
-	end
+	}
 
+    #lets keep it unique, sorry retwitters
+    @tweets = @tweets.uniq
 
-
+  end
 end
-=======
-      #downcase
-      tweet = tweet.downcase
-      }
-    @data = @newdata
-    end
-
-
-end
->>>>>>> development
