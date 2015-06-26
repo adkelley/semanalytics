@@ -46,6 +46,9 @@ class Tapi
 			sanitize(data)
 		)
 
+		Corpus.reset 
+		Group.reset
+
 		#loads data associations
 		Corpus.load(@words,@tweets)
 

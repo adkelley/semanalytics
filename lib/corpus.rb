@@ -19,6 +19,7 @@ class Corpus
 		@isCore = false
 		@tweets = [] 
 		@relations = []
+		if @@list == nil then @@list = Array.new end
 		@@list << self
 	end
 
@@ -44,6 +45,14 @@ class Corpus
 				return obj
 			end
 		end
+	end
+
+	def self.reset
+		Corpus.all.each {|w|
+			w = nil
+		}
+		@@list = Array.new
+		@@core = Array.new
 	end
 
 	def self.break_into_groups

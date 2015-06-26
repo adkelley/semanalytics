@@ -52,6 +52,14 @@ class Group
 		{name: self.name, children: arr}
 	end
 
+	def self.reset
+		Group.list.each {|g|
+			g = nil
+		}
+
+		@@group_list = Array.new
+	end
+
 	def self.data_out
 		arr = []
 		Group.list.each {|g|
