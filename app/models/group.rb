@@ -4,24 +4,32 @@ class Group
 
 
 	def to_s
-		Group.plist
+		self.name.to_s
 	end
 
 	#the strength of a group is the relationship between its founding pair
-	def initialize(name, w1, w2)
+	def initialize(name, w1 = nil, w2 = nil)
 		@name = name
 		@words = Array.new
 		@@group_list << self
 
-		#add parents
-		add(w1)
-		add(w2)
+		#add parents if they're provided
+		if w1 != nil 
+			add(w1) 
+			@strength = w1.top_relation_score
+		end
+		if w1 != nil then add(w2) end
 
-		@strength = w1.top_relation_score
+		
 	end
 
+	#nil, or duplicates, just forget
 	def add(word)
-		@words << word
+		if (word != nil)
+			if !Group.find(word)
+				@words << word
+			end
+		end
 	end
 
 	def words
@@ -46,6 +54,15 @@ class Group
 		false
 	end
 
+	def self.addNeutral(obj)
+		if (g = self.get?("neutral"))
+			g.add(obj)
+		else
+			Group.new("neutral",obj)
+		end
+	end
+
+	#for finding the group of a word
 	def self.find(word)
 		@@group_list.each { |g| 
 			g.words.each {|w|
@@ -55,6 +72,17 @@ class Group
 			}
 		}
 		return nil
+	end
+
+	#for finding a group by its name
+	def self.get? (name)
+		Group.list.each{|g|
+			if g.name == name 
+				
+				return g 
+			end
+		}
+		return false
 	end
 
 end
