@@ -13,6 +13,8 @@ class UsersController < ApplicationController
 
   def show
     @user = current_user
+    @query_limit = 10
+    @queries = @user.queries.limit(@query_limit)
   end
 
   def create
