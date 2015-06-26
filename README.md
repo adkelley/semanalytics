@@ -8,7 +8,12 @@ Our first implementation leverages the Twitterverse, with future versions incorp
 Simply type in a search query, together with the minimum (default: 5) and maximum (default: 100) times the word
 should appear in your sample. Then start exploring and refining your searches. Note that you can used advanced
 query techniques to narrow down your search. For example, <em>warriors - 'golden state'</em> will search on the
-word <em>warriors</em> while excluding <em>golden state</em> from your search. </p>
+word <em>warriors</em> while excluding <em>golden state</em> from your search.
+
+To save your search queries, <em>create an account and login</em> before searching. You'll find your last
+10 searches on your profile page.  You can drill down further on your search by clicking on any node in
+the bubble
+
 
 ### How it works
 A bubble cloud of individual words/hashtags that are found in a twitter api query. The larger the word, the more often it occurs. The query spans a set of time, and has some basic filtering/processing to remove utility words (e.g., the, and, is) and twitter related noise (e.g., hash tags). We use two models. User, Query. 
@@ -36,3 +41,6 @@ user_id - Integer
 Bubble Cloud Visualization - [d3.js](http://d3js.org)
 Twitter Queries - [twitter REST](https://dev.twitter.com/rest/public)
 
+### Deployment
+---
+[Heroku](https://nameless-plains-8633.herokuapp.com/)
