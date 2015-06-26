@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :redirect_unauthenticated, except: [:new, :index, :create]
+  #before_filter :redirect_unauthenticated, except: [:new, :index, :create]
 
   def index
     @user = current_user
@@ -11,9 +11,9 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  # def show
-  #   @user = User.find(params[:id])
-  # end
+  def show
+    @user = current_user
+  end
 
   def create
     @user = User.create(user_params)
