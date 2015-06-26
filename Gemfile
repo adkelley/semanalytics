@@ -2,9 +2,11 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+ruby '2.2.1'
 gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
+gem 'rails_12factor', group: :production
 # Bootstrap rails
 gem 'bootstrap-sass', '~> 3.3.4'
 # Use SCSS for stylesheets
@@ -17,8 +19,8 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 
 #nlp processing gems
-gem 'tf-idf-similarity'
-gem 'narray-devel', :git => 'https://github.com/masa16/narray-devel'
+#gem 'tf-idf-similarity'
+#gem 'narray-devel', :git => 'https://github.com/masa16/narray-devel'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -41,13 +43,22 @@ gem 'twitter'
 # ffaker for seeding the database
 gem 'ffaker'
 
+# for caching pages, ideally json page data
+gem 'actionpack-page_caching'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
+
+
+gem 'unicorn-rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  # rspec for testing
+  gem 'rspec-rails', '~> 3.0.0'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 

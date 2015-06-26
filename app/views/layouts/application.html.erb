@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>D3Musketeers</title>
+  <title>Semanalytics</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.js" charset="utf-8"></script>
+  <script src="//use.typekit.net/daa7xqs.js"></script>
+  <script>try{Typekit.load();}catch(e){}</script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => false %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <!-- navbar -->
   <%= render 'layouts/header' %>
-  <%= render partial: "layouts/flash", flash: flash %>
 
   <!-- control panel & graph -->
   <div class="container-fluid">
     <div class="row"> 
-      <div class="col-sm-3">
-        <%= render partial: "layouts/sidebar" %>
+      <div class="col-sm-3" id="left-col">
+        <%= render partial: 'layouts/sidebar' %>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-9" id="right-col">
+        <%= render partial: "layouts/flash", flash: flash %>
         <%= yield %>
       </div> <!-- graph -->
     </div>

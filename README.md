@@ -1,51 +1,38 @@
-# d3t
+# Semanaltyics
+Semanalytics is a fun way to visualize and analyize what hashtags, words, and phrases (i.e., query)
+are trending (or not) in social media. Besides being a lot of fun, Semanaltyics' bubble visualizations helps 
+you to understand the context in which your query is being used in social media by counting and drawing a
+'Bubble Graph' of the number of times your query appears in a large sample (>= 500) of social media posts.
 
-### Basic MVP Scope
-A bubblecloud of individual words/hashtags that are found in a twitter api query. The larger the word, the more often it occurs. The query spans a set of time, and has some basic filtering/processing. We will use three models. User, Query, Tweet. 
+Our first implementation leverages the Twitterverse, with future versions incorporating other social media sites.
+Simply type in a search query, together with the minimum (default: 5) and maximum (default: 100) times the word
+should appear in your sample. Then start exploring and refining your searches. Note that you can used advanced
+query techniques to narrow down your search. For example, <em>warriors - 'golden state'</em> will search on the
+word <em>warriors</em> while excluding <em>golden state</em> from your search. </p>
 
-### Tuesday Evening Update
-It's all coming together. We have a basic MVP.  
-What are some possible things we could work on?  
-**Rate limiting** - it would be helpful to be able to see remaining API credits.  
-**User OAuth** - signing in users to their twitter profile for additional API credits.  
-**Save queries in DB** - this deserves some thought, does a query have a certain lifespan more  like a cache? or can users save specific queries in their profile for the longrun?  
-**Display Timespan & # of Tweets** - for each query, this would be helpful contextually.  
-**Loading animations** - feels really smooth  
-**Click to explore** - explore the network by clicking on an existing svg  
-**Color by avg followers** - average followers together and color words across a gradient so you can see if some terms are being pushed by extra popular users, or by regular people  
-**Link to Twitter** - I find myself regularly going to twitter to search word combinations in order to clarify the intent/meaning of patterns I'm seeing. We have the original tweets, is there any way to cleanly display this if desired  
-**Increasing interactivity** - with d3  
-**Word distance** - could be measured with colors  
-**User controls tweet depth** - could be really helpful, also could interact with limits    
-**Time Travel** - pull an until value first, and then take the tweet id and run a since_id to grab tweets that happened after a date
+### How it works
+A bubble cloud of individual words/hashtags that are found in a twitter api query. The larger the word, the more often it occurs. The query spans a set of time, and has some basic filtering/processing to remove utility words (e.g., the, and, is) and twitter related noise (e.g., hash tags). We use two models. User, Query. 
 
-
-### Models - User, Query, Tweet 
+### Models - User, Query
+---
 Relationships look like this.
 * A user has many queries, a query belongs to a user
-* A query has many tweets, and a tweet has many queries
 
-###### User
+#### User
 ---
 email - String  
-password - Password  
-OAuth Token - String ?  
+password_digest - String
 
-###### Query
+#### Query
 ---
 time - Timestamp  
-filter_words - Boolean  
-threshold - Integer  
 query - String  
+min word count - Integer  
+max word count - Integer  
 user_id - Integer  
 
-###### Tweet
+### APIs, Libraries
 ---
-content - String  
-time_tweeted - Timestamp  
+Bubble Cloud Visualization - [d3.js](http://d3js.org)
+Twitter Queries - [twitter REST](https://dev.twitter.com/rest/public)
 
-### Decisions
-* Lets store tweets "in the raw" and rebuild the results arrays as needed. We chose this direction to preserve flexibility if we change what gets used as a 'result' in the future.
-* Lets process only a single word/hashtag as the Query. Possibly in the future we could parse multiple words...but we're sticking to one for immediate simplicity.
-* Colors, we came up with an exciting idea of using color gradients to measure on average how far apart any particular word is from the query word (in characters). We're pushing this back to the 2nd stage. Also in that idea is that we could correlate multiple query words each along a different axis of color gradient...RGB.  
-* OAuth & API access. We decided to go with OAuth access, and store tokens from previous users. In this way, we can still display previous results on the front page when a new user arrives without requiring them to create an account. We will be using the REST API as opposed to the streaming API, because it allows us to pull things back through time.

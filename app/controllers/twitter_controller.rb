@@ -1,25 +1,22 @@
 class TwitterController < ApplicationController
-        @@max_word_count = 5
-        @@min_word_count = 1
+  require "./lib/Tapi.rb"
 
 	def data
-		if (params[:query])
-	            #binding.pry
-	            if params[:min]
-	 				t = Tapi.new(params[:query], 1000, @@min_word_count)
-	            else
-	  				t = Tapi.new(params[:query], 1000)
-	            end
-		else
-			t = Tapi.new("drugs", 500)
-		end
-		render :json => t.data
+
+          #binding.pry
+          #if current_user
+	    if (params[:query])
+	     t = Tapi.new(params[:query], 1000, params[:min].to_i, params[:max].to_i)
+            else
+	      t = Tapi.new("#tech", 500)
+	    end
+	    render :json => t.data
+          # else
+          #   flash[:error] = "Sorry, you must be logged in to search"
+          #   redirect_to :back
+          # end
 	end
 
-        def threshold
-            @@max_word_count ||= params[:max]
-        end
-        
 	# def search
 	# 	begin
 	# 		t = Tapi.new
