@@ -7,7 +7,6 @@ class Corpus
 	attr_accessor :isCore, :relations
 	@@list = Array.new
 	@@core = Array.new
-	#has_many :tweets
 
 	def to_s
 		@name.to_s
@@ -208,7 +207,7 @@ class Corpus
 	#calculates relations from one word to the whole corpus
 	def relate_to
 
-		#each object of the core except yourself
+		#top 150 objects except yourself
 		@@list[0..150].each do |obj|
 			if (obj != self) 
 				related = 0

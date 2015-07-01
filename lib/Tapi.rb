@@ -98,19 +98,6 @@ class Tapi
 		data
 	end
 
-	def stopwords(data)
-	stop = IO.read("lib/stopwords.list").split()
-		data.delete_if do |k|
-			if stop.include?(k)
-				#deletes on true
-				true
-			else
-				#returns false if it equals query
-				k == @@query_word
-			end
-		end
-	end
-
 	def build(data)
 		arr = []
 		straight_hash = Hash.new(0)
