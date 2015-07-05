@@ -19,6 +19,8 @@ class Query
 
 		@groups = Array.new
 		@words = Array.new
+		@seed_min = 4
+		@seed_max = 5000
 
 		#tweets is an array 0f objects returned by Twitter Gem
 		@tweets = search(search_string,num_of_tweets,options)
@@ -44,47 +46,21 @@ class Query
 
 		api.search((@query), options).take(num_of_tweets).collect do |tweet|
 			data.push(tweet)
+			puts tweet
 		end
 
 		#return raw search data
 		data
 	end
 
-	def sanitize(data)
-
-		@tweets = data.map { |t|
-
-			#remove urls
-			tweet = t[:text].gsub(URI.regexp,'')
-
-			#remove symbols, except @ #
-			sym = /[^a-zA-Z\d\s@#]/
-			tweet = tweet.gsub(sym, '')
-
-			#remove newlines
-			tweet = tweet.gsub(/\n/,'')
-
-			#remove single characters
-			tweet = tweet.gsub(/\s.\s/,' ')
-
-			#downcase
-			tweet = tweet.downcase
-
-		}
-
-		#lets keep it unique, sorry retwitters
-		@tweets = @tweets.uniq
-	end
-
 	#  sanitize tweets, compile wordlist,
 	#  filter stopwords, access min/max
 	#  calculate relationships
-	def build_word_corpus(tweets)
-		straight_hash = Hash.new(0)
-		arr = []
+	def build_word_corpus(data)
 
+		arr = []
 		#lets pull out all the tweet texts
-		tweets.map! {|tweet|
+		tweets = data.map {|tweet|
 			tweet.text
 		}
 
@@ -95,9 +71,6 @@ class Query
 
 			#store urls
 			urls += URI.extract(t,['http','https'])
-
-			#
-			#urls.map!{|url|url.join}
 
 			#remove urls
 			tweet = t.gsub(URI.regexp,'')
@@ -116,50 +89,64 @@ class Query
 			tweet = tweet.downcase
 		}
 
-		#break into words
+		#build wordcount hash
+		straight_hash = Hash.new(0)
 		words = tweets.join(' ').split(' ')
 		words.each { |word| 
 			straight_hash[word] += 1
 		}
 
+		#build urlcount hash
+		url_hash = Hash.new(0)
+		urls.each { |url|
+			if url != nil
+				url_hash[url] += 1
+			end
+		}
 
-		binding.pry
+		#sort url hash by frequency
+		url_hash = url_hash.sort_by {|_key, value| value}.reverse.to_h
 
 		#get rid of stopwords before we start heavy processing
 		straight_hash = stopwords(straight_hash)
 
 		#filter out relatedness to seed above/below thresholds
 		straight_hash = seed_min_max(straight_hash)
+		url_hash = seed_min_max(url_hash)
+
+		#put urls back in
+		straight_hash.merge!(url_hash)
 
 		#sort by frequency
 		straight_hash = straight_hash.sort_by {|_key, value| value}.reverse.to_h
 
-		#filter min_occur & max_occur
-		 # if (occurrences >= min_occur && occurrences <= max_occur )
-	  #       swh = {name: word, size: occurrences}
-	  #       arr.push swh
-	  #       end
-   	  #       end
-
-
+		#format for d3
 		straight_hash.each {|k,v|
 			arr <<	{ name: k, seed_relationship: v }
 		}
 		@words = arr
 	end
 
-	#  tweet viewing methods
-	#  raw, sanitized, filtered
-	def raw_tweets
+	def stopwords(data)
+		stop = IO.read("lib/stopwords.list").split()
+		data.delete_if do |k|
+			if stop.include?(k)
+				#deletes on true
+				true
+			elsif k == @query_word
+				#if stopword includes query_word lets delete it too
+				true
+			else
+				false
+			end
+		end
 	end
-	def clean_tweets
-	end 
 
-
-
-
-
-	def break_into_groups
+	def seed_min_max(data)
+		data.delete_if do |k,v|
+			v <= @seed_min || @seed_max < v
+		end
+		data
 	end
 
 end
