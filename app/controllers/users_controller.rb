@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  # remove the this before filter or use it
   #before_filter :redirect_unauthenticated, except: [:new, :index, :create]
 
   def index
@@ -36,8 +37,9 @@ class UsersController < ApplicationController
   end
 
   private
+  
     def user_params
-      @user_params = {}
+      @user_params = {} # not neccessary remove
       @user_params = params.require(:user).permit(:email, :password, :password_confirmation)
     end
 end
