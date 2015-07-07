@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController
   def new
     @user = User.new
-    render :new
   end
 
   def create
@@ -10,12 +9,12 @@ class SessionsController < ApplicationController
       login(@user)
       redirect_to "/"
     else
-      redirect_to "/"
+      redirect_to "/" # redirect to an actual login page
       flash[:error] = "Invalid email or password. Please try again."
     end
   end
 
-  def signout
+  def signout # refactor action name
     logout
     redirect_to "/"
     flash[:success] = "Successfully logged out"
@@ -23,7 +22,6 @@ class SessionsController < ApplicationController
 
   private
     def user_params
-      @user_params = {}
-      @user_params = params.require(:user).permit(:email, :password)
+      params.require(:user).permit(:email, :password)
     end
 end
