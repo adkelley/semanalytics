@@ -1,3 +1,5 @@
+// REMOVE BROKEN CODE
+
 function search(e){
 	e.preventDefault();
 	//ajax call for data
