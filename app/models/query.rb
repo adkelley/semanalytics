@@ -1,12 +1,16 @@
 class Query 
-	attr_reader :search_string, :groups, :words, :tweets
+	attr_reader :search_string, :groups, :words, :tweets, :log, :core
 
 	# Other models include
 	# Group, Tweet, Corpus
 	
+	# Which model sits on top?  Query holds references to everything? 
+
+
 	# there's a different kind of filtering/options 
 	# min/max seed relationship thresholds for viewing
 	# doesn't run the search again, but does require processing data
+
 	
 	def initialize(search_string, 
 				   num_of_tweets = 1000,
@@ -14,20 +18,53 @@ class Query
 						lang: "en",
 						count: 100,
 						result_type: "recent"
-					}
+					},
+					relate_to_num = 150
 		)
 
 		@groups = Array.new
 		@words = Array.new
+		@core = Array.new
 		@seed_min = 4
 		@seed_max = 5000
 
+		@log = Log.new("Opening")
+
 		#tweets is an array 0f objects returned by Twitter Gem
+		log = Logr.new('search')
 		@tweets = search(search_string,num_of_tweets,options)
+		log.close("query on #{search_string}(#{@tweets.count} tweets)")
 
 		#corpus is the flattened mass of words that inhabit the tweets
+		aCorpus = Time.now
 		@words = build_word_corpus(@tweets)
+		bCorpus = Time.now
+		@log << "Corpus built in #{((bCorpus-aCorpus) * 1000).to_int } ms"
 
+		# load @core #
+		#a number of words at the 'top', when sorted by relation to seed
+		@words[0..20].each do |obj|
+			obj.isCore = true
+			@core << obj
+		end
+
+		@log << "#{@core.count} words selected for core"
+
+
+		#calculate relations from all words to top X words?
+		aRelations = Time.now
+		@core = @core.sort_by {|v| v.seed_relation}.reverse
+		@words.each do |w|
+			#how many words down does each word relate to?
+			w.relate_to(relate_to_num, self)
+		end
+		bRelations = Time.now
+		@log << "Relations calculated in #{((bRelations-aRelations) * 1000).to_int } ms"
+
+		#break into related groups
+
+
+		#format for d3
 
 	end
 
@@ -49,8 +86,85 @@ class Query
 			puts tweet
 		end
 
+		#log
+
 		#return raw search data
 		data
+	end
+
+	def break_words_into_groups
+
+		#core is sorted by top_relation_score (not seed, core is a list of X number of words with the highest seed relationship)
+		@core = @core.sort_by! {|c| c.top_relation_score }.reverse
+		
+		#iterate through core once, break off atomic pairs
+		@core.delete_if { |core_word|
+			g = nil
+
+			if (core_word.top_relation.top_relation == core_word )
+
+				#combines word names for groupname, and adds both words to group
+				g = Group.new(core_word.name.to_s + '/' + core_word.top_relation.name.to_s, core_word, core_word.top_relation)
+				@core.delete(core_word.top_relation)
+				next true
+			end
+		}
+		# iterate again
+		# if single word's top relation is another group, join that group.
+
+		# elseif pointing to another single, start a new group
+		@core.delete_if { |core_word|
+			if (g = Group.find_by_word(core_word.top_relation))
+				
+				#core word joins a group if strong enough, or it stays single in core
+				if (core_word.top_relation_score >= g.strength.to_int / 5) 
+					g.add(core_word)
+					next true
+				end
+
+			#its pointing to another single, let them group!
+			else
+				g = Group.new(core_word.name.to_s + '/' + core_word.top_relation.name.to_s, core_word, core_word.top_relation)
+
+				#maybe it's focal isn't core
+				if @core.include? core_word.top_relation
+					@core.delete(core_word.top_relation)
+				end
+
+				#regardless, remove itself from core
+				next true
+			end
+		}
+
+		#add any remaining core's to neutral group, using a special Group method for adding to neutral because we don't necessarily know when it first happens.
+		@core.each {|core_word|
+			if core_word != nil
+				if !Group.find_by_word(core_word.top_relation)
+					Group.addNeutral(core_word)
+				else
+					Group.addNeutral(core_word)
+				end
+			end
+		}
+
+		#might as well find a home for the rest of them
+		plebs = @words - @core
+		plebs.each { |pleb|
+			if pleb != nil
+				#check if it's focal has a group, if yes, join in
+				if g = Group.find_by_word(pleb.top_relation) 
+					#quick strength check
+					if (pleb.top_relation_score >= g.strength.to_int / 5) 
+						g.add(pleb) 
+					else #wasn't strong enough
+						Group.addNeutral(pleb)
+					end
+				else #wasn't focused on a group
+					Group.addNeutral(pleb)
+				end
+			end
+		}
+
 	end
 
 	#  sanitize tweets, compile wordlist,
@@ -89,41 +203,60 @@ class Query
 			tweet = tweet.downcase
 		}
 
-		#build wordcount hash
+		# count number of times each word occurs using a hash
 		straight_hash = Hash.new(0)
 		words = tweets.join(' ').split(' ')
 		words.each { |word| 
 			straight_hash[word] += 1
 		}
 
-		#build urlcount hash
+		@log << "build_word_corpus found #{straight_hash.count} words"
+
+		# do the same for urls
 		url_hash = Hash.new(0)
 		urls.each { |url|
 			if url != nil
 				url_hash[url] += 1
 			end
-		}
+		} 
 
-		#sort url hash by frequency
+		# sort url hash by frequency
 		url_hash = url_hash.sort_by {|_key, value| value}.reverse.to_h
 
-		#get rid of stopwords before we start heavy processing
+		# get rid of stopwords before we start heavy processing
 		straight_hash = stopwords(straight_hash)
 
-		#filter out relatedness to seed above/below thresholds
+		# filter out relatedness to seed above/below thresholds
 		straight_hash = seed_min_max(straight_hash)
 		url_hash = seed_min_max(url_hash)
 
-		#put urls back in
+		# put urls back in
 		straight_hash.merge!(url_hash)
 
-		#sort by frequency
+		# sort by frequency
 		straight_hash = straight_hash.sort_by {|_key, value| value}.reverse.to_h
 
-		#format for d3
+		@log << "#{straight_hash.count} words left after stopwords and thresholds"
+
+		# create word objects from straight_hash
 		straight_hash.each {|k,v|
-			arr <<	{ name: k, seed_relationship: v }
+			arr << word = Word.new(k,v)
+
+			#gather tweets for each word
+			data.each do |tweet|
+				twords = tweet.text.split()
+				if twords.include?(k)
+					word.tweets << tweet
+				end
+			end
 		}
+
+
+		#format for d3
+		# straight_hash.each {|k,v|
+		# 	arr <<	{ name: k, seed_relation: v }
+		# }
+
 		@words = arr
 	end
 

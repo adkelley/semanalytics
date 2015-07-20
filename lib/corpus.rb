@@ -54,9 +54,10 @@ class Corpus
 		@@core = Array.new
 	end
 
+	#takes one input 'core', which is an instance variable
 	def self.break_into_groups
 
-		#core is sorted by top_relation_score
+		#core is sorted by top_relation_score (not seed, core is a list of X number of words with the highest seed relationship)
 		core = self.core.sort_by! {|c| c.top_relation_score }.reverse
 		
 		#iterate through core once, break off atomic pairs
@@ -71,10 +72,12 @@ class Corpus
 				next true
 			end
 		}
+		# iterate again
+		# if single word's top relation is another group, join that group.
 
-		#iterate again, clean up the singles
+		# elseif pointing to another single, start a new group
 		core.delete_if { |core_word|
-			if (g = Group.find(core_word.top_relation))
+			if (g = Group.find_by_word(core_word.top_relation))
 				
 				#core word joins a group if strong enough, or it stays single in core
 				if (core_word.top_relation_score >= g.strength.to_int / 5) 
@@ -99,7 +102,7 @@ class Corpus
 		#add any remaining core's to neutral group, using a special Group method for adding to neutral because we don't necessarily know when it first happens.
 		core.each {|core_word|
 			if core_word != nil
-				if !Group.find(core_word.top_relation)
+				if !Group.find_by_word(core_word.top_relation)
 					Group.addNeutral(core_word)
 				else
 					Group.addNeutral(core_word)
@@ -112,7 +115,7 @@ class Corpus
 		plebs.each { |pleb|
 			if pleb != nil
 				#check if it's focal has a group, if yes, join in
-				if g = Group.find(pleb.top_relation) 
+				if g = Group.find_by_word(pleb.top_relation) 
 					#quick strength check
 					if (pleb.top_relation_score >= g.strength.to_int / 5) 
 						g.add(pleb) 
@@ -141,7 +144,7 @@ class Corpus
 			# 	core.delete(core_word.top_relation)
 			# 	true
 			# else
-			# 	g = Group.find(core_word.top_relation.name)
+			# 	g = Group.find_by_word(core_word.top_relation.name)
 			# 	binding.pry
 			# 	g.add(core_word)
 			# 	true

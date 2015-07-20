@@ -46,7 +46,7 @@ class Group
 	def out
 		arr = []
 		@words.each {|word|
-			arr << {name: word.name, size: word.seed_relationship}
+			arr << {name: word.name, size: word.seed_relation}
 		}
 
 		{name: self.name, children: arr}
@@ -88,8 +88,9 @@ class Group
 		end
 	end
 
+	#searches across all groups, returns group that contains 'word'
 	#for finding the group of a word
-	def self.find(word)
+	def self.find_by_word(word)
 		@@group_list.each { |g| 
 			g.words.each {|w|
 				if w == word
