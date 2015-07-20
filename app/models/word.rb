@@ -1,6 +1,7 @@
 class Word
 	attr_accessor :isCore, :relations
 	attr_reader :tweets, :name, :seed_relation
+	@@list = Array.new
 
 	def initialize(name, seed_relation, tweets = [])
 		@name = name
@@ -8,7 +9,7 @@ class Word
 		@tweets = tweets
 		@isCore = false
 		@relations = []
-
+		@@list << self
 	end
 
 	#TODO#
@@ -40,6 +41,30 @@ class Word
 		end
 		
 		@relations = @relations.sort_by {|v| v[:relationship]}.reverse
+	end
+
+	def top_relation 
+		if self.relations.count > 0
+			Word.find(self.relations[0][:word])
+		else
+			nil
+		end
+	end	
+
+	def top_relation_score
+		if self.relations.count > 0
+			self.relations[0][:relationship]
+		else
+			0
+		end
+	end
+
+	def self.find(word)
+		@@list.each do |obj|
+			if (obj.name == word) 
+				return obj
+			end
+		end
 	end
 
 end

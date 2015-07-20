@@ -26,7 +26,7 @@ class Group
 	#nil, or duplicates, just forget
 	def add(word)
 		if (word != nil)
-			if !Group.find(word)
+			if !Group.find_word_in_groups(word)
 				@words << word
 			end
 		end
@@ -78,6 +78,16 @@ class Group
 			puts g.name
 		}
 		false
+	end
+
+	def self.find_word_in_groups(word)
+		@@group_list.each do |group|
+			group.words.each {|w|
+				if word == w.name 
+					return w 
+				end
+			}
+		end
 	end
 
 	def self.addNeutral(obj)

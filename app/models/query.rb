@@ -13,7 +13,7 @@ class Query
 
 	
 	def initialize(search_string, 
-				   num_of_tweets = 1000,
+				   num_of_tweets = 300,
 		           options = {
 						lang: "en",
 						count: 100,
@@ -28,18 +28,15 @@ class Query
 		@seed_min = 4
 		@seed_max = 5000
 
-		@log = Log.new("Opening")
+		@log = Logr.new
+
 
 		#tweets is an array 0f objects returned by Twitter Gem
-		log = Logr.new('search')
 		@tweets = search(search_string,num_of_tweets,options)
-		log.close("query on #{search_string}(#{@tweets.count} tweets)")
+		
 
 		#corpus is the flattened mass of words that inhabit the tweets
-		aCorpus = Time.now
 		@words = build_word_corpus(@tweets)
-		bCorpus = Time.now
-		@log << "Corpus built in #{((bCorpus-aCorpus) * 1000).to_int } ms"
 
 		# load @core #
 		#a number of words at the 'top', when sorted by relation to seed
@@ -47,21 +44,20 @@ class Query
 			obj.isCore = true
 			@core << obj
 		end
-
-		@log << "#{@core.count} words selected for core"
-
+		@log.point "#{@core.count} words selected for core"
 
 		#calculate relations from all words to top X words?
-		aRelations = Time.now
+		@log.start
 		@core = @core.sort_by {|v| v.seed_relation}.reverse
 		@words.each do |w|
 			#how many words down does each word relate to?
 			w.relate_to(relate_to_num, self)
 		end
-		bRelations = Time.now
-		@log << "Relations calculated in #{((bRelations-aRelations) * 1000).to_int } ms"
+		@log.close("calculate relations")
 
 		#break into related groups
+		break_words_into_groups()
+		puts "past broke"
 
 
 		#format for d3
@@ -69,6 +65,7 @@ class Query
 	end
 
 	def search (search_string, num_of_tweets, options)
+		@log.start
 		api = Twitter::REST::Client.new do |config|
 			config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
 			config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
@@ -88,19 +85,26 @@ class Query
 
 		#log
 
+		@log.close("query on #{search_string} (#{data.count} tweets)")
 		#return raw search data
 		data
 	end
 
-	def break_words_into_groups
+	def break_words_into_groups()
 
+		@log.start
 		#core is sorted by top_relation_score (not seed, core is a list of X number of words with the highest seed relationship)
 		@core = @core.sort_by! {|c| c.top_relation_score }.reverse
 		
 		#iterate through core once, break off atomic pairs
 		@core.delete_if { |core_word|
 			g = nil
+			#@log.point(core_word.name)
 
+			#knock out words with no top_relation
+			if core_word.top_relation == nil then next true end
+
+			#words are each other's top relations
 			if (core_word.top_relation.top_relation == core_word )
 
 				#combines word names for groupname, and adds both words to group
@@ -109,6 +113,7 @@ class Query
 				next true
 			end
 		}
+
 		# iterate again
 		# if single word's top relation is another group, join that group.
 
@@ -165,12 +170,15 @@ class Query
 			end
 		}
 
+		@groups = Group.list
+		@log.close("broke into groups")
 	end
 
 	#  sanitize tweets, compile wordlist,
 	#  filter stopwords, access min/max
 	#  calculate relationships
 	def build_word_corpus(data)
+		@log.start
 
 		arr = []
 		#lets pull out all the tweet texts
@@ -256,6 +264,8 @@ class Query
 		# straight_hash.each {|k,v|
 		# 	arr <<	{ name: k, seed_relation: v }
 		# }
+
+		@log.close("build_word_corpus finished")
 
 		@words = arr
 	end
