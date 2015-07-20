@@ -19,7 +19,6 @@ class Group
 			@strength = w1.top_relation_score
 		end
 		if w1 != nil then add(w2) end
-
 		
 	end
 
@@ -66,7 +65,7 @@ class Group
 			arr << g.out 
 		}
 
-		{name: Tapi.query_word?, children: arr}
+		{name: "the_query", children: arr}
 	end
 
 	def self.list
@@ -87,6 +86,7 @@ class Group
 					return w 
 				end
 			}
+			return nil
 		end
 	end
 

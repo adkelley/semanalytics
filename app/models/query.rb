@@ -1,5 +1,5 @@
 class Query 
-	attr_reader :search_string, :groups, :words, :tweets, :log, :core
+	attr_reader :search_string, :groups, :words, :tweets, :log, :core, :d3json
 
 	# Other models include
 	# Group, Tweet, Corpus
@@ -57,11 +57,9 @@ class Query
 
 		#break into related groups
 		break_words_into_groups()
-		puts "past broke"
-
 
 		#format for d3
-
+		@d3json = Group.data_out.to_json
 	end
 
 	def search (search_string, num_of_tweets, options)
@@ -90,7 +88,7 @@ class Query
 		data
 	end
 
-	def break_words_into_groups()
+	def break_words_into_groups
 
 		@log.start
 		#core is sorted by top_relation_score (not seed, core is a list of X number of words with the highest seed relationship)
