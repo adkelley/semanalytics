@@ -12,6 +12,10 @@ class Word
 		@@list << self
 	end
 
+	def to_s
+		"Name:#{self.name} Rel:#{self.relations.count} isCore:#{self.isCore}"
+	end
+
 	#TODO#
 	# Rewrite using Word model the self being used below was a reference to an instance of 
 	# Corpus, which was essentially a word. 

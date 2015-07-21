@@ -56,7 +56,7 @@ class Query
 		@log.close("calculate relations")
 
 		#break into related groups
-		break_words_into_groups()
+		break_words_into_groups
 
 		#format for d3
 		@d3json = Group.data_out.to_json
@@ -78,7 +78,6 @@ class Query
 
 		api.search((@query), options).take(num_of_tweets).collect do |tweet|
 			data.push(tweet)
-			puts tweet
 		end
 
 		#log
@@ -88,10 +87,20 @@ class Query
 		data
 	end
 
-	def break_words_into_groups
+	#just for a moment
+	def list(core)
+		arr = []
+		@core.each {|word|
+			arr << word.name
+		}
+		arr
+	end
 
+	def break_words_into_groups
 		@log.start
 		#core is sorted by top_relation_score (not seed, core is a list of X number of words with the highest seed relationship)
+		binding.pry
+
 		@core = @core.sort_by! {|c| c.top_relation_score }.reverse
 		
 		#iterate through core once, break off atomic pairs
@@ -107,6 +116,9 @@ class Query
 
 				#combines word names for groupname, and adds both words to group
 				g = Group.new(core_word.name.to_s + '/' + core_word.top_relation.name.to_s, core_word, core_word.top_relation)
+
+				@log.point("Atom pair #{core_word.name} and #{core_word.top_relation.name} added to #{g.name}")
+
 				@core.delete(core_word.top_relation)
 				next true
 			end
@@ -122,12 +134,15 @@ class Query
 				#core word joins a group if strong enough, or it stays single in core
 				if (core_word.top_relation_score >= g.strength.to_int / 5) 
 					g.add(core_word)
+					@log.point("#{core_word.name} sidles up next to #{g.name}")
 					next true
 				end
 
 			#its pointing to another single, let them group!
 			else
 				g = Group.new(core_word.name.to_s + '/' + core_word.top_relation.name.to_s, core_word, core_word.top_relation)
+
+				@log.point("asymmetric pair #{core_word.name} and #{core_word.top_relation.name} => #{g.name}")
 
 				#maybe it's focal isn't core
 				if @core.include? core_word.top_relation
@@ -151,7 +166,7 @@ class Query
 		}
 
 		#might as well find a home for the rest of them
-		plebs = @words - @core
+		plebs = @words - @core - Group.all_words
 		plebs.each { |pleb|
 			if pleb != nil
 				#check if it's focal has a group, if yes, join in

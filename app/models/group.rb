@@ -18,7 +18,8 @@ class Group
 			add(w1) 
 			@strength = w1.top_relation_score
 		end
-		if w1 != nil then add(w2) end
+
+		if w2 != nil then add(w2) end
 		
 	end
 
@@ -120,6 +121,16 @@ class Group
 			end
 		}
 		return false
+	end
+
+	def self.all_words
+		arr = []
+		Group.list.each{|g|
+			g.words.each {|w|
+				arr << w
+			}
+		}
+		arr
 	end
 
 end

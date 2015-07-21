@@ -5,6 +5,7 @@ class Logr < Array
     #start(section_name)
   end
 
+  #sets start timer for opening report
   def start (section_name = "")
     @single = {
       section: section_name,
@@ -13,6 +14,7 @@ class Logr < Array
     @timeA = Time.now()
   end
 
+  #closes up with end timer and report
   def close (report = "")
   	@timeB = Time.now()
   	ms = ((@timeB - @timeA) * 1000).to_int
@@ -23,7 +25,7 @@ class Logr < Array
   	@single
   end
 
-  #call this inside a start and close?
+  #records a single point to :report
   def point (text)
     a_point = {
       report: text
