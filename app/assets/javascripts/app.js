@@ -27,6 +27,7 @@ $(function() {
         }
 
     });
+
     $.get("/twitter/?query=" + encodeURIComponent(defaultQuery) +
         "&min=" + minWC +
         "&max=" + maxWC).done(function(data) {
@@ -39,7 +40,7 @@ function draw(root) {
     var height = 960,
         width = 1260,
         format = d3.format(",d"),
-        duration = 200,
+        duration = 100,
         color = d3.scale.category20c();
 
     d3.select(self.frameElement).style("height", height + "px");
@@ -71,7 +72,7 @@ function draw(root) {
         .on("mouseover", function(d, i) {
             div.transition()
                 .duration(200)
-                .style("opacity", .9)
+                .style("opacity", 0.9)
             div.html(d.className + "<br/>" + d.value)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");

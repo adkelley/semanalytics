@@ -13,7 +13,7 @@ class Query
 
 	
 	def initialize(search_string, 
-				   num_of_tweets = 300,
+				   num_of_tweets = 1000,
 		           options = {
 						lang: "en",
 						count: 100,
@@ -60,6 +60,8 @@ class Query
 
 		#format for d3
 		@d3json = Group.data_out.to_json
+
+		@log = Logr.output
 	end
 
 	def search (search_string, num_of_tweets, options)
@@ -88,18 +90,17 @@ class Query
 	end
 
 	#just for a moment
-	def list(core)
-		arr = []
-		@core.each {|word|
-			arr << word.name
-		}
-		arr
-	end
+	# def list(core)
+	# 	arr = []
+	# 	@core.each {|word|
+	# 		arr << word.name
+	# 	}
+	# 	arr
+	# end
 
 	def break_words_into_groups
 		@log.start
 		#core is sorted by top_relation_score (not seed, core is a list of X number of words with the highest seed relationship)
-		binding.pry
 
 		@core = @core.sort_by! {|c| c.top_relation_score }.reverse
 		

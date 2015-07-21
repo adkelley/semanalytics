@@ -2,7 +2,9 @@ class TwitterController < ApplicationController
   include SessionsHelper
 
   def data
+    t = nil
     t = Query.new(params[:query])
+    puts t.log
 
     render :json => t.d3json
   end
