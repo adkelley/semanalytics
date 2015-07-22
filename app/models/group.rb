@@ -19,7 +19,9 @@ class Group
 			@strength = w1.top_relation_score
 		end
 
-		if w2 != nil then add(w2) end
+		if w2 != nil
+			add(w2) 
+		end
 		
 	end
 
@@ -28,6 +30,7 @@ class Group
 		if (word != nil)
 			if !Group.find_word_in_groups(word)
 				@words << word
+				word.group = self
 			end
 		end
 	end

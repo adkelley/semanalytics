@@ -1,5 +1,5 @@
 class Word
-	attr_accessor :isCore, :relations
+	attr_accessor :isCore, :relations, :group
 	attr_reader :tweets, :name, :seed_relation
 	@@list = Array.new
 
@@ -9,6 +9,7 @@ class Word
 		@tweets = tweets
 		@isCore = false
 		@relations = []
+		@group = nil
 		@@list << self
 	end
 

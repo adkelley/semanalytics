@@ -1,5 +1,5 @@
 class Query 
-	attr_reader :search_string, :groups, :words, :tweets, :log, :core, :d3json
+	attr_reader :query_word, :groups, :words, :tweets, :log, :core, :d3json
 
 	# Other models include
 	# Group, Tweet, Corpus
@@ -11,6 +11,10 @@ class Query
 	# min/max seed relationship thresholds for viewing
 	# doesn't run the search again, but does require processing data
 
+	def to_s
+		puts @groups
+		"#{@query_word} returned #{@words.count} words in #{@groups.count} groups.\r\n"
+	end
 	
 	def initialize(search_string, 
 				   num_of_tweets = 1000,
@@ -27,7 +31,7 @@ class Query
 		@core = Array.new
 		@seed_min = 4
 		@seed_max = 5000
-
+		@tweets = nil
 		@log = Logr.new
 
 
@@ -117,6 +121,9 @@ class Query
 
 				#combines word names for groupname, and adds both words to group
 				g = Group.new(core_word.name.to_s + '/' + core_word.top_relation.name.to_s, core_word, core_word.top_relation)
+				@groups << g
+				# core_word.groups << g
+				# core_word.top_relation.groups << g
 
 				@log.point("Atom pair #{core_word.name} and #{core_word.top_relation.name} added to #{g.name}")
 
@@ -142,6 +149,7 @@ class Query
 			#its pointing to another single, let them group!
 			else
 				g = Group.new(core_word.name.to_s + '/' + core_word.top_relation.name.to_s, core_word, core_word.top_relation)
+				@groups << g
 
 				@log.point("asymmetric pair #{core_word.name} and #{core_word.top_relation.name} => #{g.name}")
 
@@ -184,7 +192,8 @@ class Query
 			end
 		}
 
-		@groups = Group.list
+		#this was the phantom double
+		#@groups = Group.list
 		@log.close("broke into groups")
 	end
 
